@@ -21,10 +21,10 @@ export function RootNavigationBar(){
     return(
         <>
         <nav className="">
-            <Link to={'/'}><button className="btn btn-primary">Home</button></Link>
-            <Link to={'/login'}><button className="btn btn-primary">Login</button></Link>
-            <Link to={'/sensor'}><button className="btn btn-primary">Sensor</button></Link>
-            <Link to={'/history'}><button className="btn btn-primary">History</button></Link>
+            <Link to={'/'}><button className="btn btn-outline-primary" style={{borderRadius: 0}}>Home</button></Link>
+            <Link to={'/login'}><button className="btn btn-outline-primary" style={{borderRadius: 0}}>Login</button></Link>
+            <Link to={'/sensor'}><button className="btn btn-outline-primary" style={{borderRadius: 0}}>Sensor</button></Link>
+            <Link to={'/history'}><button className="btn btn-outline-primary" style={{borderRadius: 0}}>History</button></Link>
         </nav>
         <Outlet />
         </>
