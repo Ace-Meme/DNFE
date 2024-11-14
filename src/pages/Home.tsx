@@ -1,5 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { link } from "../context/context";
+import { useNavigate } from "react-router-dom";
 
 export function Home(){
     // const [data, setData] = useState([10]);
@@ -14,34 +16,75 @@ export function Home(){
     //     //destroy interval on unmount
     //     return () => clearInterval(interval)
     // })
+
+    const [sensors, setSensors] = useState([]);
+    const [devices, setDevices] = useState([]);
+    const navigate = useNavigate();
+    useEffect(() => {
+        axios.get(link + '/sensors').then((res) => {
+            console.log(res.data);
+            setSensors(res.data.sensor);
+        }).catch((err) => {
+            console.log(err)
+        })
+    }, [])
+    useEffect(() => {
+        axios.get(link + '/devices').then((res) => {
+            setDevices(res.data.device);
+        }).catch(console.error)
+    }, [])
     return (
         <div style={{height: '100vh', width: '100vw', display: 'flex', border: 'solid 1px black'}}>
             <div className="" style={{width: '250px', display: 'flex', flexDirection: 'column', border: 'solid 1px black'}}>
                 <button className="btn btn-secondary" style={{borderRadius: 0}}>Khu vực 1</button>
-                <button className="btn btn-secondary" style={{borderRadius: 0}}>Khu vực 1</button>
                 <button type="button" className="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#area"> + Thêm khu vực </button>
             </div>
             <div className="flex-fill">
-                <div style={{margin: '5px', padding: '5px', display: 'flex', justifyContent: 'space-around', border: 'solid 1px black'}}>
+                <h5 className="p-2">Thiết bị</h5>
+                {/* <div style={{margin: '5px', padding: '5px', display: 'flex', justifyContent: 'space-around', border: 'solid 1px black'}}>
                     <div>Máy bơm</div>
                     <button className="btn btn-danger">Tình trạng: Bật</button>
                     <div className="form-check form-switch">
                         <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked />
                     </div>
-                </div>
-                <div className="text-center" style={{border: 'solid 1px black', margin: '5px'}} data-bs-toggle="modal" data-bs-target="#device"> + Thêm thiết bị </div>
+                </div> */}
                 <div style={{ margin: '5px', padding: '5px', display: 'flex', gap: '10px'}}>
-                    <div className="card">
-                        <div className="card-title">Cảm biến ánh sáng</div>
-                        <div>Ảnh</div>
-                    </div>
-                    <div className="card">
-                        <div>Cảm biến ánh sáng</div>
-                        <div>Ảnh</div>
-                    </div>
-                    <div className="card" data-bs-toggle="modal" data-bs-target="#device">
-                        <div>+ Thêm thiết bị</div>
-                    </div>
+                    {
+                        devices && devices.map((value, index) => {
+                            return (
+                                <div className="card">
+                                    <div className="card-body">
+                                        <div className="card-title">{value.name}</div>
+                                        <button className="btn btn-secondary" onClick={() => {navigate('/device', {state: {info: value}})}}>Xem thông số</button> 
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                    <button className="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#device">
+                        + Thêm thiết bị
+                    </button>
+                </div>
+                
+                <div className="text-center" style={{border: 'solid 1px black', margin: '5px'}} data-bs-toggle="modal" data-bs-target="#device"> + Thêm thiết bị </div>
+                <h5 className="p-2">Cảm biến</h5>
+                <div style={{ margin: '5px', padding: '5px', display: 'flex', gap: '10px'}}>
+                    {
+                        sensors && sensors.map((value, index) => {
+                            return(
+                                <div className="card" key={index}>
+                                    <div className="card-body">
+                                        <div className="card-title">{value.name}</div>
+                                        <button className="btn btn-secondary" onClick={() => {navigate('/sensor', {state: {info: value}})}}>Xem thông số</button>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                    
+                    <button className="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#sensor">
+                        + Thêm cảm biến
+                    </button>
                 </div>
             </div>
             
