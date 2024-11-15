@@ -1,19 +1,19 @@
 export function Login(){
     return (
-        <div className="vh-100 w-100">
-            <div className="w-50">
+        <div className="vh-100 vw-100 d-flex justify-content-center align-items-center">
+            {/* <div className="w-50">
                 <img src="https://preview.redd.it/top-20-strongest-bleach-characters-v0-kicjw8dnh56a1.jpg?width=640&crop=smart&auto=webp&s=d1b431b19e65d9434beda32e956c3343ce142d7b" alt="Not found"/>
-            </div>
+            </div> */}
             <div>
-                <div>
-                <div className="mb-3">
+                <div className="border border-black shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                  <div className="mb-3">
                     <label htmlFor="exampleFormControlInput1" className="form-label">Username</label>
                     <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
                     </div>
                     <div className="mb-3">
                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Password</label>
                     <input className="form-control" type="password" id="exampleFormControlTextarea1" />
-                    </div>
+                  </div>
                     <button className="btn btn-success">Log in</button>
                     <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signup">
                     Sign up
