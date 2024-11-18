@@ -38,8 +38,10 @@ export function Device(){
     return (
         <div className="vh-100 vw-100">
            <div className="card">
-                <div className="card-title">{state.info.name}</div>
-                <button onClick={toggle} className={"btn " + (on == 0 ? "btn-outline-danger" : "btn-outline-success")}>{on == 0 ? "Đang tắt" : "Đang bật"}</button>
+                <div className="card-body">
+                    <div className="card-title">{state.info.name}</div>
+                    <button onClick={toggle} className={"btn " + (on == 0 ? "btn-outline-danger" : "btn-outline-success")}>{on == 0 ? "Đang tắt" : "Đang bật"}</button>
+                </div>
            </div>
         </div>
     )
