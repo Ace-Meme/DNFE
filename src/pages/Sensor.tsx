@@ -132,13 +132,18 @@ import { link } from '../context/context';
 
 export function Sensor(){
     const [data, setData] = useState([{time: "2024", value: 30}]);
+    const [isNum, setIsNum] = useState(true);
     let {state} = useLocation();
     if(!state) return (<>404 Not found</>)
     
-    
+    const token = sessionStorage.getItem("token");
     const getData = () => {
         let d = new Date();
-        axios.get(link + `/sensors?feedname=${state.info.name}`).then((res) => {
+        axios.get(link + `/sensors?feedname=${state.info.name}`, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        }).then((res) => {
             console.log(res.data);
             let o = {time: d.toLocaleString(), value: res.data.value}
             if(data.length < 7) setData([...data, o])
@@ -153,8 +158,13 @@ export function Sensor(){
 
     useEffect(() => {
         let d = new Date();
-        axios.get(link + `/sensors?feedname=${state.info.name}`).then((res) => {
+        axios.get(link + `/sensors?feedname=${state.info.name}`, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        }).then((res) => {
             setData([{time: d.toLocaleString(), value: res.data.value}])
+            if(isNaN(Number(res.data.value))) setIsNum(false);
         })
     }, [])
 
@@ -166,15 +176,17 @@ export function Sensor(){
     return (
         <div className="vh-100 vw-100">
             <h5>Cảm biến {state.info.name}</h5>
-            <div>
-                <LineChart width={1500} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-                <Line type="monotone" dataKey="value" stroke="#8884d8" />
-                <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                <XAxis dataKey="time" />
-                <YAxis />
-                <Tooltip />
-                </LineChart>
-            </div>
+            {
+                isNum && (<div>
+                    <LineChart width={1500} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                    <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                    <XAxis dataKey="time" />
+                    <YAxis />
+                    <Tooltip />
+                    </LineChart>
+                </div>)
+            }
             <table className='table table-striped'>
                 <thead>
                     <tr>

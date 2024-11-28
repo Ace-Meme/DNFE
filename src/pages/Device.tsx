@@ -5,14 +5,19 @@ import { link } from "../context/context";
 
 export function Device(){
     let {state} = useLocation();
-    if(!state) return (<>404 Not found</>)
+    
     
     const [on, setOn] = useState(0);
     const [loading, setLoading] = useState(false);
-
-    
+    const [history, setHistory] = useState([]);
+    const token = sessionStorage.getItem("token")
+    if(!state) return (<>404 Not found</>)
     useEffect(() => {
-        axios.get(link + `/devices?feedname=${state.info.name}`).then((res) => {
+        axios.get(link + `/devices?feedname=${state.info.name}`, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        }).then((res) => {
             setOn(res.data.value);
         })
     }, [])
@@ -24,6 +29,7 @@ export function Device(){
             name: state.info.name,
             value: req
         }).then((res) => {
+            console.log(res.data)
             setOn(res.data.value)
             setLoading(false)
         })
@@ -43,6 +49,20 @@ export function Device(){
                     <button onClick={toggle} className={"btn " + (on == 0 ? "btn-outline-danger" : "btn-outline-success")}>{on == 0 ? "Đang tắt" : "Đang bật"}</button>
                 </div>
            </div>
+           <table className="table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Username</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+
+                    }
+                </tbody>
+           </table>
         </div>
     )
 }

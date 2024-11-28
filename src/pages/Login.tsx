@@ -1,4 +1,23 @@
+import axios from "axios"
+import { link } from "../context/context"
+import { useNavigate } from "react-router-dom"
+
 export function Login(){
+  const navigate = useNavigate();
+  const signin = () => {
+    axios.post(link + "/users/login", {
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value
+    }).then((res) => {
+      console.log(res.data)
+      if(res.data.auth != undefined){
+        sessionStorage.setItem('token', res.data.auth.slice(6))
+        navigate('/home');
+      }
+      else console.log('No')
+    })
+  }
+
     return (
         <div className="vh-100 vw-100 d-flex justify-content-center align-items-center">
             {/* <div className="w-50">
@@ -8,13 +27,13 @@ export function Login(){
                 <div className="border border-black shadow-sm p-3 mb-5 bg-body-tertiary rounded">
                   <div className="mb-3">
                     <label htmlFor="exampleFormControlInput1" className="form-label">Username</label>
-                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+                    <input type="email" className="form-control" id="username" placeholder="name@example.com" />
                     </div>
                     <div className="mb-3">
                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Password</label>
-                    <input className="form-control" type="password" id="exampleFormControlTextarea1" />
+                    <input className="form-control" type="password" id="password" />
                   </div>
-                    <button className="btn btn-success">Log in</button>
+                    <button className="btn btn-success" onClick={signin}>Log in</button>
                     <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#signup">
                     Sign up
                     </button>

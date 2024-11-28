@@ -20,8 +20,14 @@ export function Home(){
     const [sensors, setSensors] = useState([]);
     const [devices, setDevices] = useState([]);
     const navigate = useNavigate();
+    const token = sessionStorage.getItem("token")
+    console.log(token)
     useEffect(() => {
-        axios.get(link + '/sensors').then((res) => {
+        axios.get(link + '/sensors', {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        }).then((res) => {
             console.log(res.data);
             setSensors(res.data.sensor);
         }).catch((err) => {
@@ -29,7 +35,11 @@ export function Home(){
         })
     }, [])
     useEffect(() => {
-        axios.get(link + '/devices').then((res) => {
+        axios.get(link + '/devices',  {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        }).then((res) => {
             setDevices(res.data.device);
         }).catch(console.error)
     }, [])
