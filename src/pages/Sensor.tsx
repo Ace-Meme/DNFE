@@ -139,7 +139,9 @@ export function Sensor(){
     const token = sessionStorage.getItem("token");
     const getData = () => {
         let d = new Date();
-        axios.get(link + `/sensors?feedname=${state.info.name}`, {
+        axios.post(link + `/sensors`,{
+            feedname: state.info.name
+        }, {
             headers:{
                 Authorization: `Bearer ${token}`
             }
@@ -158,7 +160,9 @@ export function Sensor(){
 
     useEffect(() => {
         let d = new Date();
-        axios.get(link + `/sensors?feedname=${state.info.name}`, {
+        axios.post(link + `/sensors`,{
+            feedname: state.info.name
+        }, {
             headers:{
                 Authorization: `Bearer ${token}`
             }

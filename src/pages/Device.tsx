@@ -6,20 +6,39 @@ import { link } from "../context/context";
 export function Device(){
     let {state} = useLocation();
     
-    
     const [on, setOn] = useState(0);
     const [loading, setLoading] = useState(false);
     const [history, setHistory] = useState([]);
-    const token = sessionStorage.getItem("token")
+    const token = sessionStorage.getItem("token");
+    console.log("device token", token)
     if(!state) return (<>404 Not found</>)
     useEffect(() => {
-        axios.get(link + `/devices?feedname=${state.info.name}`, {
+        axios.post(link + `/devices`, {
+            feedname: state.info.name
+        }, {
             headers:{
                 Authorization: `Bearer ${token}`
             }
         }).then((res) => {
             setOn(res.data.value);
         })
+        axios.post(link + `/devices/logs`, {
+            feedname: state.info.name
+        }, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        }).then((res) => {
+            setHistory(res.data.response)
+        })
+        // axios.get(link + `/devices`, {
+        //     headers:{
+        //         Authorization: `Bearer ${token}`
+        //     }
+        // }).then((res) => {
+        //     console.log(res.data.value);
+        // })
+            
     }, [])
 
     const toggle = () => {
@@ -28,6 +47,10 @@ export function Device(){
         axios.post(link + '/devices/set', {
             name: state.info.name,
             value: req
+        }, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
         }).then((res) => {
             console.log(res.data)
             setOn(res.data.value)
@@ -59,7 +82,15 @@ export function Device(){
                 </thead>
                 <tbody>
                     {
-
+                        history.map((value, index) => {
+                            return(
+                                <tr>
+                                    <td>{value.timestamp}</td>
+                                    <td>{value.username}</td>
+                                    <td>{value.value == 0 ? "Tắt" : "Bật"}</td>
+                                </tr>
+                            )
+                        })
                     }
                 </tbody>
            </table>
