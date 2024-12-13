@@ -133,6 +133,7 @@ import { link } from '../context/context';
 export function Sensor(){
     const [data, setData] = useState([{time: "2024", value: 30}]);
     const [isNum, setIsNum] = useState(true);
+    const [loading, setLoading] = useState(false);
     let {state} = useLocation();
     if(!state) return (<>404 Not found</>)
     
@@ -159,6 +160,7 @@ export function Sensor(){
     // }
 
     useEffect(() => {
+        setLoading(true);
         let d = new Date();
         axios.post(link + `/sensors`,{
             feedname: state.info.name
@@ -169,7 +171,9 @@ export function Sensor(){
         }).then((res) => {
             setData([{time: d.toLocaleString(), value: res.data.value}])
             if(isNaN(Number(res.data.value))) setIsNum(false);
+            setLoading(false);
         })
+        
     }, [])
 
     useEffect(() =>{
@@ -177,6 +181,13 @@ export function Sensor(){
         //destroy interval on unmount
         return () => clearInterval(interval)
     })
+    if(loading) return(
+        <div className="vh-100 vw-100">
+            <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    )
     return (
         <div className="vh-100 vw-100">
             <h5>Cảm biến {state.info.name}</h5>

@@ -17,6 +17,9 @@ export function Login(){
       else console.log('No')
     })
   }
+  const signup = () => {
+    console.log("signup!")
+  }
 
     return (
         <div className="vh-100 vw-100 d-flex justify-content-center align-items-center">
@@ -64,7 +67,7 @@ export function Login(){
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" className="btn btn-primary">Save changes</button>
+        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={signup}>Save changes</button>
       </div>
     </div>
   </div>
