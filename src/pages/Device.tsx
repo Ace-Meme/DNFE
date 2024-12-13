@@ -56,9 +56,7 @@ export function Device(){
 
     const toggle = () => {
         setLoading(true)
-        console.log("toggle zero", on, on + 1)
         let req = (on + 1) % 2;
-        console.log("toggle first", req)
         axios.post(link + '/devices/set', {
             name: state.info.name,
             value: req
@@ -69,8 +67,19 @@ export function Device(){
         }).then((res) => {
             console.log("toggle second", res.data.value)
             setOn(res.data.value)
-            setLoading(false)
-        })
+            axios.post(link + `/devices/logs`, {
+                feedname: state.info.name
+            }, {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }).then((res) => {
+                console.log("hi", res.data.response)
+                setHistory(res.data.response)
+                setLoading(false)
+            })
+        }).catch(console.log)
+        
     }
     
     if(loading) return(
