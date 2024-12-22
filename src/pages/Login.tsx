@@ -1,10 +1,14 @@
 import axios from "axios"
 import { link } from "../context/context"
 import { useNavigate } from "react-router-dom"
+import * as bootstrap from 'bootstrap'
 
 export function Login(){
   const navigate = useNavigate();
   const signin = () => {
+    const toast = document.getElementById("liveToast");
+    
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toast)
     axios.post(link + "/users/login", {
       username: document.getElementById('username').value,
       password: document.getElementById('password').value
@@ -12,13 +16,28 @@ export function Login(){
       console.log(res.data)
       if(res.data.auth != undefined){
         sessionStorage.setItem('token', res.data.auth.slice(6))
+        sessionStorage.setItem('username', document.getElementById('username').value)
         navigate('/home');
       }
-      else console.log('No')
+      else {
+        console.log("No")
+        toastBootstrap.show()
+      }
     })
   }
   const signup = () => {
     console.log("signup!")
+    axios.post(link + "/users/register", {
+      name: document.getElementById('name1').value,
+      username: document.getElementById('username1').value,
+      password: document.getElementById('password1').value
+    }).then((res) => {
+      console.log(res.data)
+      if(res.data.status == 400){
+        console.log("Fail");
+      }
+      else console.log("success");
+    })
   }
 
     return (
@@ -42,6 +61,18 @@ export function Login(){
                     </button>
                 </div>
             </div>
+
+            <div className="toast-container position-fixed bottom-0 end-0 p-3">
+              <div id="liveToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div className="toast-header">
+                  <strong className="me-auto">Lỗi</strong>
+                  <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div className="toast-body">
+                  Có lỗi xảy ra.
+                </div>
+              </div>
+          </div>
             
 
 <div className="modal fade" id="signup" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -53,16 +84,16 @@ export function Login(){
       </div>
       <div className="modal-body">
                 <div className="mb-3">
+                    <label htmlFor="exampleFormControlInput1" className="form-label">Name</label>
+                    <input type="email" className="form-control" id="name1" placeholder="Your name" />
+                </div>
+                <div className="mb-3">
                     <label htmlFor="exampleFormControlInput1" className="form-label">Username</label>
-                    <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com" />
+                    <input type="email" className="form-control" id="username1" placeholder="name@example.com" />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleFormControlTextarea1" className="form-label">Password</label>
-                    <input className="form-control" type="password" id="exampleFormControlTextarea1" />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleFormControlTextarea1" className="form-label">Confirm Password</label>
-                    <input className="form-control" type="password" id="exampleFormControlTextarea1" />
+                    <input className="form-control" type="password" id="password1" />
                 </div>
       </div>
       <div className="modal-footer">
